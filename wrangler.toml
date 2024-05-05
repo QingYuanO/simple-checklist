@@ -83,3 +83,9 @@ pages_build_output_dir = "./build/client"
 # [[env.production.kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
 # id = "<PRODUCTION_NAMESPACE_ID>"
+
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "simple-checklist"
+database_id = "98ab90ec-b337-4d1c-82ab-4a61a142250e"
