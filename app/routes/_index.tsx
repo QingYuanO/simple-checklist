@@ -8,6 +8,8 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   await authenticator.isAuthenticated(request, {
     failureRedirect: '/login',
   });
+  console.log(context.cloudflare.env);
+
   const user = await db.user.findMany();
   return json(user);
 };
@@ -24,7 +26,6 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const results = useLoaderData<typeof loader>();
-  console.log(results);
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.8' }}>
