@@ -19,6 +19,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     failureRedirect: '/login',
     context,
   });
+  
 }
 
 // Finally, we can export a loader function where we check if the user is

@@ -5,12 +5,13 @@ import { authenticator } from '~/services/auth.server';
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { db } = context;
-  await authenticator.isAuthenticated(request, {
-    failureRedirect: '/login',
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/wechat-auth',
   });
-  console.log(context.cloudflare.env);
 
-  const user = await db.user.findMany();
+  // const user = await db.user.findMany();
+  console.log(user);
+
   return json(user);
 };
 

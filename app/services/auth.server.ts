@@ -13,14 +13,22 @@ export const authenticator = new Authenticator<{ id: string; isAdmin: boolean }>
 
 // Tell the Authenticator to use the form strategy
 authenticator.use(
-  new FormStrategy(async ({ form, context }) => {
-    const openid = form.get('openid') as string;
-    console.log('openid', openid);
+  new FormStrategy(async ({ context, request }) => {
+    const { WECHAT_APPID, WECHAT_APP_SECRET } = context!.cloudflare.env;
+    const { searchParams } = new URL(request.url);
+    const code = searchParams.get('code');
 
-    const user = await context?.db.user.findUnique({ where: { openid } });
-    console.log('user', user);
+    const res = await fetch(
+      `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${WECHAT_APPID}&secret=${WECHAT_APP_SECRET}&code=${code}&grant_type=authorization_code`
+    );
+    const { openid } = (await res.json()) as { errcode?: number; openid?: string };
+    if (!openid) {
+      throw new AuthorizationError('Invalid code');
+    }
+    const user = await context!.db.user.findUnique({ where: { openid } });
     if (!user) {
-      throw new AuthorizationError('Bad Credentials: Password must be a string');
+      const newUser = await context!.db.user.create({ data: { openid, name: openid.slice(5) } });
+      return newUser!;
     }
 
     return user;

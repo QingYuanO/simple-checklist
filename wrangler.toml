@@ -12,17 +12,17 @@ pages_build_output_dir = "./build/client"
 
 
 [vars]
-API_KEY = "abc123"
+WECHAT_APPID = "wx256067f403eec4d8"
+WECHAT_APP_SECRET = "38fc344e32b1ddf937644e3f82e49d83"
 
 ######## PREVIEW environment config ########
 
 [env.preview.vars]
-API_KEY = "xyz789"
+WECHAT_APPID = "wx256067f403eec4d8"
+WECHAT_APP_SECRET = "38fc344e32b1ddf937644e3f82e49d83"
 
 ######## PRODUCTION environment config ########
 
-[env.production.vars]
-API_KEY = "abc123"
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "simple-checklist"
