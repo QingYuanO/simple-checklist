@@ -4,6 +4,11 @@ import { cn } from '~/lib/utils';
 import { ChevronRight, Smartphone, Store } from 'lucide-react';
 import { Link, useRouteLoaderData } from '@remix-run/react';
 import { loader as rootLoader } from '~/root';
+import { MetaFunction } from '@remix-run/cloudflare';
+
+export const meta: MetaFunction = () => {
+  return [{ title: '我的' }];
+};
 
 export default function AdminMe() {
   const { user } = useRouteLoaderData<typeof rootLoader>('root') ?? {};

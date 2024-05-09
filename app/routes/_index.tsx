@@ -16,7 +16,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {
     failureRedirect: '/wechat-auth',
   });
-  console.log(user);
 
   return user.isAdmin ? redirect('/admin') : redirect('/consumer');
 };
