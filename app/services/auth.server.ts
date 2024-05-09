@@ -17,22 +17,27 @@ authenticator.use(
     const { WECHAT_APPID, WECHAT_APP_SECRET } = context!.cloudflare.env;
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
-    console.log('code1', code);
 
     const res = await fetch(
       `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${WECHAT_APPID}&secret=${WECHAT_APP_SECRET}&code=${code}&grant_type=authorization_code`
     );
     const { openid } = (await res.json()) as { errcode?: number; openid?: string };
-    console.log(openid);
 
     if (!openid) {
       throw new AuthorizationError('Invalid code');
     }
     const user = await context!.db.user.findUnique({ where: { openid } });
     if (!user) {
-      const newUser = await context!.db.user.create({ data: { openid, name: openid.slice(5) } });
+      const newUser = await context!.db.user.create({ data: { openid, name: openid.slice(0, 5) } });
       return newUser!;
     }
+    //用于开发
+    await context?.db.user.update({
+      data: {
+        isAdmin: true,
+      },
+      where: { openid },
+    });
 
     return user;
   }),

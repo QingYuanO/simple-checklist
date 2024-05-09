@@ -5,10 +5,10 @@ import { authenticator } from '~/services/auth.server';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'New Remix App' },
+    { title: 'Easy清单' },
     {
       name: 'description',
-      content: 'Welcome to Remix! Using Vite and Cloudflare!',
+      content: '易于使用的货物清单管理',
     },
   ];
 };
@@ -18,11 +18,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
   console.log(user);
 
-  if (user) {
-    return user.isAdmin ? redirect('/admin') : redirect('/consumer');
-  }
-
-  return null;
+  return user.isAdmin ? redirect('/admin') : redirect('/consumer');
 };
 export default function Index() {
   return null;

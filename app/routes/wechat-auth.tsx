@@ -2,6 +2,7 @@ import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/clo
 import { useSubmit } from '@remix-run/react';
 import { useEffect } from 'react';
 import { authenticator } from '~/services/auth.server';
+import { commitSession, getSession } from '~/services/session.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {});
@@ -13,9 +14,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export async function action({ request, context }: ActionFunctionArgs) {
-  await authenticator.isAuthenticated(request, {
-    successRedirect: '/',
-  });
   const { WECHAT_APPID } = context.cloudflare.env;
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
@@ -25,11 +23,18 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return redirect(oauth2);
   }
 
-  return await authenticator.authenticate('wechat-auth', request, {
-    successRedirect: '/',
+  const user = await authenticator.authenticate('wechat-auth', request, {
     failureRedirect: '/wechat-auth',
     context,
   });
+
+  const session = await getSession(request.headers.get('cookie'));
+
+  session.set(authenticator.sessionKey, user);
+
+  const headers = new Headers({ 'Set-Cookie': await commitSession(session) });
+
+  return user.isAdmin ? redirect('/admin', { headers }) : redirect('/consumer', { headers });
 }
 export default function WechatAuth() {
   const submit = useSubmit();
