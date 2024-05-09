@@ -17,11 +17,14 @@ authenticator.use(
     const { WECHAT_APPID, WECHAT_APP_SECRET } = context!.cloudflare.env;
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
+    console.log('code1', code);
 
     const res = await fetch(
       `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${WECHAT_APPID}&secret=${WECHAT_APP_SECRET}&code=${code}&grant_type=authorization_code`
     );
     const { openid } = (await res.json()) as { errcode?: number; openid?: string };
+    console.log(openid);
+
     if (!openid) {
       throw new AuthorizationError('Invalid code');
     }
@@ -33,5 +36,5 @@ authenticator.use(
 
     return user;
   }),
-  'wechat'
+  'wechat-auth'
 );

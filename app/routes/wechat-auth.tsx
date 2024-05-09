@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import { authenticator } from '~/services/auth.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticator.isAuthenticated(request, {
-    successRedirect: '/',
-  });
+  const user = await authenticator.isAuthenticated(request, {});
+  if (user) {
+    return user.isAdmin ? redirect('/admin') : redirect('/consumer');
+  }
 
   return null;
 };
@@ -19,12 +20,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const redirectUri = 'http://192.168.3.2/wechat-auth';
-  const oauth2 = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${WECHAT_APPID}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_base#wechat_redirect`;
+  const oauth2 = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${WECHAT_APPID}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo#wechat_redirect`;
   if (!code) {
     return redirect(oauth2);
   }
 
-  return await authenticator.authenticate('wechat', request, {
+  return await authenticator.authenticate('wechat-auth', request, {
     successRedirect: '/',
     failureRedirect: '/wechat-auth',
     context,
