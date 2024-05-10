@@ -8,12 +8,21 @@ importers:
 
   .:
     dependencies:
+      '@conform-to/react':
+        specifier: ^1.1.3
+        version: 1.1.3(react@18.3.1)
+      '@conform-to/zod':
+        specifier: ^1.1.3
+        version: 1.1.3(zod@3.23.8)
       '@prisma/adapter-d1':
         specifier: ^5.13.0
         version: 5.13.0
       '@prisma/client':
         specifier: ^5.13.0
         version: 5.13.0(prisma@5.13.0)
+      '@radix-ui/react-label':
+        specifier: ^2.0.2
+        version: 2.0.2(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.3.1)(react@18.3.1)
@@ -50,18 +59,27 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
+      react-toastify:
+        specifier: ^10.0.5
+        version: 10.0.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       remix-auth:
         specifier: ^3.6.0
         version: 3.6.0(@remix-run/react@2.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(@remix-run/server-runtime@2.9.1(typescript@5.4.5))
       remix-auth-form:
         specifier: ^1.5.0
         version: 1.5.0(@remix-run/server-runtime@2.9.1(typescript@5.4.5))(remix-auth@3.6.0(@remix-run/react@2.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(@remix-run/server-runtime@2.9.1(typescript@5.4.5)))
+      remix-toast:
+        specifier: ^1.2.0
+        version: 1.2.0(@remix-run/server-runtime@2.9.1(typescript@5.4.5))
       tailwind-merge:
         specifier: ^2.3.0
         version: 2.3.0
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240502.0
@@ -338,6 +356,19 @@ packages:
 
   '@cloudflare/workers-types@4.20240502.0':
     resolution: {integrity: sha512-OB1jIyPOzyOcuZFHWhsQnkRLN6u8+jmU9X3T4KZlGgn3Ivw8pBiswhLOp+yFeChR3Y4/5+V0hPFRko5SReordg==}
+
+  '@conform-to/dom@1.1.3':
+    resolution: {integrity: sha512-QvOh00m/5USP1WT/KC0eorevQKcjfrEuzQC9NrDuMolH5Crc46tt3Nz7GGKB2yyeSyG6q3W/9uZ2isJRlTn03Q==}
+
+  '@conform-to/react@1.1.3':
+    resolution: {integrity: sha512-URnXSddgyixQdxI3+lDghwUS1fQxQk/l+mORvWwbz/EPgtJse2H2JptJ2nUh6qEjNbpPcgEEEmIqqiz8bSqX4g==}
+    peerDependencies:
+      react: '>=18'
+
+  '@conform-to/zod@1.1.3':
+    resolution: {integrity: sha512-1hQxEEBgLTRWNTauN1PhTWidXx8OUxr4LUyLLYX2RYrflDGnOsUHdzHgiyhL0epuVe7oOSptyaqBD+/fLMOpEw==}
+    peerDependencies:
+      zod: ^3.21.0
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -891,6 +922,32 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0
     peerDependenciesMeta:
       '@types/react':
+        optional: true
+
+  '@radix-ui/react-label@2.0.2':
+    resolution: {integrity: sha512-N5ehvlM7qoTLx7nWPodsPYPgMzA5WM8zZChQg8nyFJKnDO5WHdba1vv5/H6IO5LtJMfD2Q3wh1qHFGNtK0w3bQ==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-primitive@1.0.3':
+    resolution: {integrity: sha512-yi58uVyoAcK/Nq1inRY56ZSjKypBNKTa/1mcL8qdl6oJeEaDbOldlzrGn7P6Q3Id5d+SYNGc5AJgc4vGhjs5+g==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
         optional: true
 
   '@radix-ui/react-slot@1.0.2':
@@ -3198,6 +3255,12 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
+  react-toastify@10.0.5:
+    resolution: {integrity: sha512-mNKt2jBXJg4O7pSdbNUfDdTsK9FIdikfsIE/yUCxbAEXl4HMyJaivrVFcn3Elvt5xvCQYhUZm+hqTIu1UXM3Pw==}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
@@ -3260,6 +3323,11 @@ packages:
     hasBin: true
     peerDependencies:
       '@remix-run/dev': ^1.15.0 || ^2
+
+  remix-toast@1.2.0:
+    resolution: {integrity: sha512-JxGfTFKsO+zxuvJLPiwno5dwiPdjFqF6a8/izvV4yA56UNb2AjfyNa9FYnYUmoocq77xeR++dYCZyRG1YUqrjQ==}
+    peerDependencies:
+      '@remix-run/server-runtime': '>=1.15'
 
   require-like@0.1.2:
     resolution: {integrity: sha512-oyrU88skkMtDdauHDuKVrgR+zuItqr6/c//FXzvmxRGMexSDc6hNvJInGW3LL46n+8b50RykrvwSUIIQH2LQ5A==}
@@ -3916,8 +3984,8 @@ packages:
   youch@3.3.3:
     resolution: {integrity: sha512-qSFXUk3UZBLfggAW3dJKg0BMblG5biqSF8M34E06o5CSsZtH92u9Hqmj2RzGiHDi64fhe83+4tENFP2DB6t6ZA==}
 
-  zod@3.23.6:
-    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -4164,6 +4232,18 @@ snapshots:
   '@cloudflare/workers-types@4.20240405.0': {}
 
   '@cloudflare/workers-types@4.20240502.0': {}
+
+  '@conform-to/dom@1.1.3': {}
+
+  '@conform-to/react@1.1.3(react@18.3.1)':
+    dependencies:
+      '@conform-to/dom': 1.1.3
+      react: 18.3.1
+
+  '@conform-to/zod@1.1.3(zod@3.23.8)':
+    dependencies:
+      '@conform-to/dom': 1.1.3
+      zod: 3.23.8
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -4562,6 +4642,26 @@ snapshots:
       react: 18.3.1
     optionalDependencies:
       '@types/react': 18.3.1
+
+  '@radix-ui/react-label@2.0.2(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@babel/runtime': 7.24.5
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    optionalDependencies:
+      '@types/react': 18.3.1
+      '@types/react-dom': 18.3.0
+
+  '@radix-ui/react-primitive@1.0.3(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@babel/runtime': 7.24.5
+      '@radix-ui/react-slot': 1.0.2(@types/react@18.3.1)(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    optionalDependencies:
+      '@types/react': 18.3.1
+      '@types/react-dom': 18.3.0
 
   '@radix-ui/react-slot@1.0.2(@types/react@18.3.1)(react@18.3.1)':
     dependencies:
@@ -6885,7 +6985,7 @@ snapshots:
       workerd: 1.20240419.0
       ws: 8.17.0
       youch: 3.3.3
-      zod: 3.23.6
+      zod: 3.23.8
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -7354,6 +7454,12 @@ snapshots:
       '@remix-run/router': 1.16.0
       react: 18.3.1
 
+  react-toastify@10.0.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
@@ -7454,6 +7560,11 @@ snapshots:
       '@remix-run/v1-route-convention': 0.1.4(@remix-run/dev@2.9.1(@remix-run/react@2.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(@types/node@20.12.8)(typescript@5.4.5)(vite@5.2.11(@types/node@20.12.8))(wrangler@3.53.1(@cloudflare/workers-types@4.20240502.0)))
       fs-extra: 11.2.0
       minimatch: 5.1.6
+
+  remix-toast@1.2.0(@remix-run/server-runtime@2.9.1(typescript@5.4.5)):
+    dependencies:
+      '@remix-run/server-runtime': 2.9.1(typescript@5.4.5)
+      zod: 3.23.8
 
   require-like@0.1.2: {}
 
@@ -8231,6 +8342,6 @@ snapshots:
       mustache: 4.2.0
       stacktracey: 2.1.8
 
-  zod@3.23.6: {}
+  zod@3.23.8: {}
 
   zwitch@2.0.4: {}

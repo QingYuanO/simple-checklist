@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import { Outlet, redirect } from '@remix-run/react';
+import { Outlet, redirect, useLocation } from '@remix-run/react';
 import { Store, User } from 'lucide-react';
 import TabBar from '~/components/TabBar';
 import { authenticator } from '~/services/auth.server';
@@ -16,6 +16,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 };
 
 export default function ConsumerLayout() {
+  const { pathname } = useLocation();
   const routes = [
     {
       name: '商品',
@@ -32,7 +33,7 @@ export default function ConsumerLayout() {
   return (
     <div>
       <Outlet />
-      <TabBar routes={routes} />
+      {routes.map((item) => item.pathname).includes(pathname) && <TabBar routes={routes} />}
     </div>
   );
 }

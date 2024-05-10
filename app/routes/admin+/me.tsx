@@ -27,9 +27,9 @@ export default function AdminMe() {
       </div>
 
       <div className='mt-4 grid grid-cols-2 gap-4 p-4'>
-        <CustomCard link='/shop/invite-user' title='修改信息' desc='修改店铺名称、电话号码等' btnText='立即修改' className='col-span-1' />
-        <CustomCard link='/shop/goods' title='我的商品' desc='管理商品，删除、添加等' btnText='立即前往' className='col-span-1' />
-        <CustomCard link='/shop/user-list' title='用户列表' desc='查看所有用户及其对应的清单' btnText='立即查看' className='col-span-1' />
+        <CustomCard link='/admin/edit-info' title='修改信息' desc='修改店铺名称、电话号码等' btnText='立即修改' className='col-span-1' />
+        <CustomCard link='/admin/goods' title='我的商品' desc='管理商品，删除、添加等' btnText='立即前往' className='col-span-1' />
+        <CustomCard link='/admin/consumer-list' title='用户列表' desc='查看所有用户及其对应的清单' btnText='立即查看' className='col-span-1' />
       </div>
       <div className='fixed bottom-16 left-0  flex w-full justify-center '>
         <Button variant='link' className={cn('w-32 text-sm text-muted-foreground')}>

@@ -1,8 +1,13 @@
 import { LinksFunction, LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import stylesheet from '~/tailwind.css?url';
 import { authenticator } from './services/auth.server';
+import { getToast } from 'remix-toast';
+
+import { ToastContainer, toast as notify } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }];
 
@@ -13,13 +18,24 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         where: { id: sessionUser?.id },
       })
     : null;
-
-  return json({
-    user,
-  });
+  const { toast, headers } = await getToast(request);
+  return json(
+    {
+      user,
+      toast,
+    },
+    { headers }
+  );
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { toast } = useLoaderData<typeof loader>();
+  useEffect(() => {
+    if (toast) {
+      // notify on a toast message
+      notify(toast.message, { type: toast.type, autoClose: 2000 });
+    }
+  }, [toast]);
   return (
     <html lang='en'>
       <head>
@@ -32,6 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        <ToastContainer />
       </body>
     </html>
   );
