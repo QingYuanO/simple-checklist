@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (toast) {
       // notify on a toast message
-      notify(toast.message, { type: toast.type, autoClose: 2000 });
+      notify(toast.message, { type: toast.type, autoClose: 1500 });
     }
   }, [toast]);
   return (
