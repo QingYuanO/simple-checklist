@@ -38,6 +38,7 @@ authenticator.use(
       },
       where: { openid },
     });
+    console.log(user);
 
     return user;
   }),

@@ -12,12 +12,16 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {
     failureRedirect: '/wechat-auth',
   });
-
-  return user.isAdmin ? redirect('/admin') : redirect('/consumer');
+  const dbUser = await context.db.user.findUnique({ where: { id: user?.id } });
+  if (dbUser) {
+    return dbUser.isAdmin ? redirect('/admin') : redirect('/consumer');
+  } else {
+    return redirect('/wechat-auth');
+  }
 };
 export default function Index() {
   return null;

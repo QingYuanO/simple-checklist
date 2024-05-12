@@ -51,7 +51,7 @@ export default function Goods() {
         <div className='mt-20 flex flex-col items-center gap-2'>
           <Ghost className='size-8 text-zinc-800' />
           <h3 className='font-semibold'>你还没有商品</h3>
-          <Link to='/shop/goods/edit' className={buttonVariants({ variant: 'secondary' })}>
+          <Link to='/admin/goods/edit' className={buttonVariants({ variant: 'secondary' })}>
             立即创建
           </Link>
         </div>

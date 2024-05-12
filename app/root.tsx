@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunctionArgs, json } from '@remix-run/cloudflare';
+import { LinksFunction, LoaderFunctionArgs, json, redirect } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import stylesheet from '~/tailwind.css?url';
@@ -19,6 +19,11 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
       })
     : null;
   const { toast, headers } = await getToast(request);
+
+  if (sessionUser?.id && !user) {
+    redirect('/wechat-auth');
+  }
+
   return json(
     {
       user,
@@ -33,7 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (toast) {
       // notify on a toast message
-      notify(toast.message, { type: toast.type, autoClose: 1500 });
+      notify(toast.message, { type: toast.type, autoClose: 1000 });
     }
   }, [toast]);
   return (

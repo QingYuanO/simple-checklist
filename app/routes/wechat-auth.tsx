@@ -4,10 +4,17 @@ import { useEffect } from 'react';
 import { authenticator } from '~/services/auth.server';
 import { commitSession, getSession } from '~/services/session.server';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {});
   if (user) {
-    return user.isAdmin ? redirect('/admin') : redirect('/consumer');
+    const dbUser = await context.db.user.findUniqueOrThrow({ where: { id: user?.id } });
+    console.log(dbUser);
+
+    if (dbUser) {
+      return dbUser.isAdmin ? redirect('/admin') : redirect('/consumer');
+    } else {
+      return null;
+    }
   }
 
   return null;

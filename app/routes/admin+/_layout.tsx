@@ -4,6 +4,8 @@ import { ClipboardList, User } from 'lucide-react';
 import TabBar from '~/components/TabBar';
 import { authenticator } from '~/services/auth.server';
 
+export const ROUTE_PATH = '/admin' as const;
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const sessionUser = await authenticator.isAuthenticated(request, {
     failureRedirect: '/wechat-auth',

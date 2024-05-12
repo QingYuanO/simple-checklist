@@ -1,4 +1,4 @@
-import { Form, useActionData, useRouteLoaderData } from '@remix-run/react';
+import { Form, useActionData, useNavigate, useRouteLoaderData } from '@remix-run/react';
 import Header from '~/components/Header';
 import { z } from 'zod';
 import { FormProvider, useForm } from '@conform-to/react';
@@ -7,8 +7,9 @@ import { ActionFunctionArgs, json } from '@remix-run/cloudflare';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { loader as rootLoader } from '~/root';
-import { redirectWithToast } from 'remix-toast';
+import { jsonWithSuccess } from 'remix-toast';
 import FormItem from '~/components/FormItem';
+import { useEffect } from 'react';
 
 const schema = z.object({
   name: z
@@ -42,13 +43,13 @@ export async function action({ request, context }: ActionFunctionArgs) {
     },
     where: { id },
   });
-  return redirectWithToast('/admin/me', {
+  return jsonWithSuccess(submission, {
     message: '修改成功',
-    type: 'success',
   });
 }
 
 export default function EditInfo() {
+  const navigate = useNavigate();
   const { user } = useRouteLoaderData<typeof rootLoader>('root') ?? {};
   const lastResult = useActionData<typeof action>();
   const [form, fields] = useForm({
@@ -63,6 +64,12 @@ export default function EditInfo() {
     // Validate the form on blur event triggered
     shouldValidate: 'onBlur',
   });
+
+  useEffect(() => {
+    if (lastResult?.status === 'success') {
+      navigate(-1);
+    }
+  }, [lastResult, navigate]);
   return (
     <div className='py-14'>
       <Header title='修改信息' isBack />

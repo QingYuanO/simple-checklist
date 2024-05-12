@@ -9,12 +9,12 @@ type FormItemProps = {
 };
 
 export default function FormItem(props: PropsWithChildren<FormItemProps>) {
-  const [, form] = useField(props.name);
+  const [meta] = useField(props.name);
   return (
     <div className='space-y-2'>
       <Label>{props.label}</Label>
       {props.children}
-      <p className={cn('text-sm font-medium text-red-500')}>{form.errors}</p>
+      <p className={cn('text-sm font-medium text-red-500')}>{meta.errors}</p>
     </div>
   );
 }
