@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunctionArgs, json, redirect } from '@remix-run/cloudflare';
+import { LinksFunction, LoaderFunctionArgs, json } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import stylesheet from '~/tailwind.css?url';
@@ -15,14 +15,10 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   const sessionUser = await authenticator.isAuthenticated(request);
   const user = sessionUser?.id
     ? await context.db.user.findUnique({
-        where: { id: sessionUser?.id },
+        where: { id: sessionUser.id },
       })
     : null;
   const { toast, headers } = await getToast(request);
-
-  if (sessionUser?.id && !user) {
-    redirect('/wechat-auth');
-  }
 
   return json(
     {

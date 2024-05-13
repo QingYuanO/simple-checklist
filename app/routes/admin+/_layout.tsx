@@ -6,15 +6,17 @@ import { authenticator } from '~/services/auth.server';
 
 export const ROUTE_PATH = '/admin' as const;
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const sessionUser = await authenticator.isAuthenticated(request, {
     failureRedirect: '/wechat-auth',
   });
-  if (!sessionUser.isAdmin) {
-    return redirect('/consumer');
-  }
 
-  return null;
+  const dbUser = await context.db.user.findUnique({ where: { id: sessionUser?.id ?? '' } });
+  if (dbUser) {
+    return !dbUser.isAdmin ? redirect('/consumer') : null;
+  } else {
+    return redirect('/wechat-auth');
+  }
 };
 
 export default function ConsumerLayout() {

@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, json } from '@remix-run/cloudflare';
+import { LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { Outlet, redirect, useLocation } from '@remix-run/react';
 import { Store, User } from 'lucide-react';
 import TabBar from '~/components/TabBar';
@@ -8,11 +8,12 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const sessionUser = await authenticator.isAuthenticated(request, {
     failureRedirect: '/wechat-auth',
   });
-  if (sessionUser.isAdmin) {
-    return redirect('/admin');
+  const dbUser = await context.db.user.findUnique({ where: { id: sessionUser?.id ?? '' } });
+  if (dbUser) {
+    return dbUser.isAdmin ? redirect('/admin') : null;
+  } else {
+    return redirect('/wechat-auth');
   }
-  const user = await context.db.user.findUnique({ where: { id: sessionUser.id } });
-  return json({ user });
 };
 
 export default function ConsumerLayout() {
