@@ -80,7 +80,7 @@ export default function GoodsEdit() {
     <div className='pt-14'>
       <Header title={params.id ? '编辑商品' : '添加商品'} isBack />
       <FormProvider context={form.context}>
-        <Form method='POST' id={form.id} onSubmit={form.onSubmit} className='p-4 space-y-2'>
+        <Form method='POST' id={form.id} onSubmit={form.onSubmit} replace className='p-4 space-y-2'>
           <FormItem label='名称' name={fields.name.name}>
             <Input type='text' placeholder='请输入名称' name={fields.name.name} defaultValue={goods?.name ?? ''} />
           </FormItem>

@@ -1,4 +1,5 @@
 // app/services/auth.server.ts
+import { AppLoadContext, redirect } from '@remix-run/cloudflare';
 import { Authenticator, AuthorizationError } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
 
@@ -44,3 +45,17 @@ authenticator.use(
   }),
   'wechat-auth'
 );
+
+export const authUser = async (request: Request, context: AppLoadContext) => {
+  const sessionUser = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/wechat-auth',
+  });
+
+  const dbUser = await context.db.user.findUnique({ where: { id: sessionUser?.id ?? '' } });
+  if (dbUser) {
+    return dbUser;
+  } else {
+    redirect('/wechat-auth');
+    return null;
+  }
+};

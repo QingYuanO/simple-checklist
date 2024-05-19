@@ -1,6 +1,6 @@
 import { LinksFunction, LoaderFunctionArgs, json } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import stylesheet from '~/tailwind.css?url';
 import { authenticator } from './services/auth.server';
 import { getToast } from 'remix-toast';
@@ -56,5 +56,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const queryClient = new QueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  );
 }
