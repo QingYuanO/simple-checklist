@@ -26,3 +26,8 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const hasMore = Math.ceil(count / take) > page;
   return { pages, nextPage: hasMore ? page + 1 : null, total: count };
 };
+
+export const fetchGoods = async (page: number) => {
+  const res = await fetch(`/api/goods?page=${page}`);
+  return res.json() as Promise<GoodsFetchResponse>;
+};

@@ -6,7 +6,7 @@ import { authUser } from '~/services/auth.server';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const user = await authUser(request, context);
-  return !user?.isAdmin ? redirect('/admin') : null;
+  return user?.isAdmin ? redirect('/admin') : null;
 };
 
 export default function ConsumerLayout() {
