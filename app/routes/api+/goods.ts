@@ -10,7 +10,7 @@ export type GoodsFetchResponse = {
 };
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  await authUser(request, context);
+  const user = await authUser(request, context);
   const { searchParams } = new URL(request.url);
   const page = z.coerce.number().parse(searchParams.get('page') ?? 1);
   const take = 8;
@@ -21,6 +21,9 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     skip: (page - 1) * take,
     orderBy: {
       createdAt: 'desc',
+    },
+    where: {
+      ...(!user?.isAdmin ? { isActivity: true } : {}),
     },
   });
   const hasMore = Math.ceil(count / take) > page;

@@ -8,6 +8,7 @@ import { Goods } from '@prisma/client';
 import { useState } from 'react';
 import { PlusSquare, XSquare } from 'lucide-react';
 import { Button } from '~/components/ui/button';
+import { Link } from '@remix-run/react';
 
 export const meta: MetaFunction = () => {
   return [{ title: '商品' }];
@@ -69,6 +70,14 @@ export default function Components() {
           })}
         </div>
       </InfiniteList>
+      {selectedGoods.length > 0 && (
+        <div className='fixed inset-x-0 bottom-14 box-content safe-b z-10 flex h-14 items-center justify-between border-t border-border bg-background px-4 shadow sm:mx-auto sm:max-w-2xl'>
+          <div className='text-sm'>已添加商品{selectedGoods.length}件</div>
+          <Button variant={'default'} size='sm' asChild>
+            <Link to={`/consumer/check-list-confirm?ids=${selectedGoods}`}>确认清单</Link>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

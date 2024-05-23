@@ -16,7 +16,7 @@ export default function TabBar(props: TabBarProps) {
   const { pathname } = useLocation();
 
   return (
-    <div className='fixed bottom-0 left-0 right-0 z-10  flex h-[4.5rem+var(--safe-area-inset-bottom)] safe-b items-center shadow justify-around border-t border-border bg-background text-sm text-zinc-400 sm:mx-auto sm:max-w-2xl'>
+    <div className='fixed bottom-0 left-0 right-0 z-10 box-content flex h-14 safe-b items-center shadow justify-around border-t border-border bg-background text-sm text-zinc-400 sm:mx-auto sm:max-w-2xl'>
       {routes.map((route) => (
         <Link
           key={route.pathname}
