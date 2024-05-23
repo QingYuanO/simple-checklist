@@ -42,14 +42,15 @@ model Goods {
 }
 
 model CheckList {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-  name      String
-  memo      String?
-  status    String
-  address   String?
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+  name          String
+  memo          String?
+  shopOwnerMemo String?   @map("shop_owner_memo")
+  status        String
+  address       String?
 
   goodsList String @default("[]") @map("goods_list")
 
