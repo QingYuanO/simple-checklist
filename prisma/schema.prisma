@@ -21,7 +21,9 @@ model User {
   phone  String? @unique
   openid String  @unique
 
-  isAdmin   Boolean     @default(false) @map("is_admin")
+  isAdmin Boolean  @default(false) @map("is_admin")
+  isClerk Boolean? @default(false) @map("is_clerk")
+
   checkList CheckList[]
 
   @@map("user")
@@ -36,7 +38,8 @@ model Goods {
   name        String
   description String?
   cover       String?
-  isActivity  Boolean @default(false)
+
+  isActivity Boolean @default(false)
 
   @@map("goods")
 }
@@ -51,6 +54,8 @@ model CheckList {
   shopOwnerMemo String?   @map("shop_owner_memo")
   status        String
   address       String?
+
+  phone String?
 
   goodsList String @default("[]") @map("goods_list")
 

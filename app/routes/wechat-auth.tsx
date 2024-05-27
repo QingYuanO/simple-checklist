@@ -8,8 +8,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {});
   if (user) {
     const dbUser = await context.db.user.findUniqueOrThrow({ where: { id: user?.id } });
-    console.log(dbUser);
-
     if (dbUser) {
       return dbUser.isAdmin ? redirect('/admin') : redirect('/consumer');
     } else {
