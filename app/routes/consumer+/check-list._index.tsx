@@ -5,7 +5,8 @@ import CheckListCard from '~/components/CheckListCard';
 import Header from '~/components/Header';
 import { Button } from '~/components/ui/button';
 import { authUser } from '~/services/auth.server';
-import { typedjson, useTypedLoaderData } from 'remix-typedjson';
+import { typedjson, useTypedFetcher, useTypedLoaderData } from 'remix-typedjson';
+import CheckListStatusTabs from '~/components/CheckListStatusTabs';
 
 export type LoaderType = { checkList: CheckList[] };
 
@@ -16,16 +17,34 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const user = await authUser(request, context);
 
-  const checkList = await context.db.checkList.findMany({ where: { userId: user?.id ?? '' } });
+  const { searchParams } = new URL(request.url);
+  const status = searchParams.get('status');
+
+  const statusQuery = status && status !== 'ALL' ? { status } : {};
+
+  const checkList = await context.db.checkList.findMany({ where: { userId: user?.id ?? '', ...statusQuery } });
+
   return typedjson({ checkList });
 };
 
 export default function ConsumerHome() {
-  const { checkList } = useTypedLoaderData<typeof loader>();
+  const loaderData = useTypedLoaderData<typeof loader>();
+
+  const fetcher = useTypedFetcher<typeof loader>({ key: 'fetchCheckList' });
+
+  const checkList = fetcher.data ? fetcher.data.checkList : loaderData.checkList;
 
   return (
     <div className='py-14'>
       <Header title='我的清单' isBack />
+      <CheckListStatusTabs
+        onValueChange={(v) => {
+          const formData = new FormData();
+          formData.append('status', v);
+          fetcher.submit(formData);
+        }}
+      />
+
       {checkList && checkList.length > 0 ? (
         <div className='flex flex-col gap-4 p-4'>
           {checkList?.map((item) => (
@@ -48,7 +67,7 @@ export default function ConsumerHome() {
       ) : (
         <div className='mt-20 flex flex-col items-center gap-2'>
           <Ghost className='size-8 text-zinc-800' />
-          <h3 className='font-semibold'>你还没有清单，快去添加吧</h3>
+          <h3 className='font-semibold'>暂无数据</h3>
         </div>
       )}
     </div>
