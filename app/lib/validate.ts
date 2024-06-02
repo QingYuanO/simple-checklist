@@ -30,6 +30,7 @@ export const editInfoSchema = z.object({
 export const checkListStatusEnum = z.enum(['WAIT', 'PROGRESS', 'CANCEL', 'DONE', 'REFUSE']);
 export type checkListStatusEnum = z.infer<typeof checkListStatusEnum>;
 
+export type CheckListSchema = z.infer<typeof checkListSchema>;
 export const checkListSchema = z.object({
   name: z
     .string({

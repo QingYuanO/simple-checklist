@@ -32,6 +32,6 @@ export function getInventoryStatusColor(status: checkListStatusEnum) {
     case 'WAIT':
       return '#fbbf24';
     case 'CANCEL':
-      return '#f8f8f8';
+      return '#9ca3af';
   }
 }

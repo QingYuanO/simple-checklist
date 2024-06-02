@@ -7,18 +7,23 @@ interface GoodsCardProps {
   goods: Goods;
   isSelected: boolean;
   num?: number;
+  rightContent?: React.ReactNode;
+  footerContent?: React.ReactNode;
   onSwitchSelectGoods: (goods: Goods) => void;
 }
 
 export default function GoodsCard(props: GoodsCardProps) {
-  const { goods, onSwitchSelectGoods, isSelected } = props;
+  const { goods, onSwitchSelectGoods, isSelected, rightContent, footerContent } = props;
   return (
     <div
       key={goods.id}
       className={cn('flex flex-col gap-2 rounded-lg border border-border bg-card p-4 shadow', isSelected && 'border-foreground border-2')}
     >
       <div className='flex flex-col gap-1'>
-        <p className='text font-bold'>{goods.name}</p>
+        <p className='text font-bold flex justify-between'>
+          <span>{goods.name}</span>
+          <span>{rightContent}</span>
+        </p>
         <p className='text-sm text-muted-foreground'>{goods.description}</p>
       </div>
       <div className='flex items-center justify-between gap-2'>
@@ -27,6 +32,7 @@ export default function GoodsCard(props: GoodsCardProps) {
           {isSelected ? <XSquare className='cursor-pointer text-red-300' /> : <PlusSquare className='cursor-pointer' />}
         </Button>
       </div>
+      {footerContent}
     </div>
   );
 }
