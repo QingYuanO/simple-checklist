@@ -1,22 +1,23 @@
+import { Fragment, useEffect } from 'react';
+import { jsonWithSuccess } from 'remix-toast';
+import { typedjson, useTypedLoaderData } from 'remix-typedjson';
 import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { CheckList, Goods } from '@prisma/client';
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/cloudflare';
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { Form, Link, useActionData, useNavigate, useNavigation, useRouteLoaderData, useSearchParams } from '@remix-run/react';
+import { CheckListGoodsList, selectedGoodsListFamily } from '~/lib/atom';
+import { CheckListSchema, checkListSchema, checkListStatusEnum } from '~/lib/validate';
+import { loader as rootLoader } from '~/root';
+import { authUser } from '~/services/auth.server';
 import { useAtom } from 'jotai/react';
-import { Fragment, useEffect } from 'react';
-import { jsonWithSuccess } from 'remix-toast';
+
 import FormItem from '~/components/FormItem';
 import GoodsCard from '~/components/GoodsCard';
 import Header from '~/components/Header';
 import { Button, buttonVariants } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Textarea } from '~/components/ui/textarea';
-import { CheckListGoodsList, selectedGoodsListFamily } from '~/lib/atom';
-import { CheckListSchema, checkListSchema, checkListStatusEnum } from '~/lib/validate';
-import { authUser } from '~/services/auth.server';
-import { loader as rootLoader } from '~/root';
-import { typedjson, useTypedLoaderData } from 'remix-typedjson';
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
@@ -102,7 +103,7 @@ export default function CheckListConfirm() {
     // Validate the form on blur event triggered
     shouldValidate: 'onBlur',
     defaultValue: {
-      goodsList: selectedGoods.map((item) => {
+      goodsList: selectedGoods.map(item => {
         return {
           id: item.goods.id,
           name: item.goods.name,
@@ -131,37 +132,37 @@ export default function CheckListConfirm() {
   const defaultPhone = checkList?.phone ? checkList.phone : user?.phone ?? '';
 
   const handleDeleteSelectGoods = (goods: Goods) => {
-    setSelectedGoods(selectedGoods.filter((item) => item.goods.id !== goods.id));
+    setSelectedGoods(selectedGoods.filter(item => item.goods.id !== goods.id));
   };
 
   return (
-    <div className='pt-14'>
+    <div className="pt-14">
       <Header
-        title='确认清单'
+        title="确认清单"
         isBack
         rightContent={
-          <Link to={`/consumer/add-goods?type=${type}`} className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'pr-0' })}>
+          <Link to={`/consumer/add-goods?type=${type}`} className={buttonVariants({ variant: 'link', size: 'sm', className: 'pr-0' })}>
             添加
           </Link>
         }
       />
       <FormProvider context={form.context}>
-        <Form className='p-4' method='POST' id={form.id} onSubmit={form.onSubmit}>
-          <div className='flex flex-col gap-2'>
-            <FormItem label='清单名称' name={fields.name.name}>
-              <Input type='text' placeholder='请输入名称' name={fields.name.name} defaultValue={checkList?.name ?? ''} />
+        <Form className="p-4" method="POST" id={form.id} onSubmit={form.onSubmit}>
+          <div className="flex flex-col gap-2">
+            <FormItem label="清单名称" name={fields.name.name}>
+              <Input type="text" placeholder="请输入名称" name={fields.name.name} defaultValue={checkList?.name ?? ''} />
             </FormItem>
 
-            <FormItem label='手机号码' name={fields.phone.name}>
-              <Input type='text' placeholder='请输入手机号码' name={fields.phone.name} defaultValue={defaultPhone} />
+            <FormItem label="手机号码" name={fields.phone.name}>
+              <Input type="text" placeholder="请输入手机号码" name={fields.phone.name} defaultValue={defaultPhone} />
             </FormItem>
 
-            <FormItem label='地址' name={fields.address.name}>
-              <Input type='text' placeholder='请输入地址' name={fields.address.name} defaultValue={checkList?.address ?? ''} />
+            <FormItem label="地址" name={fields.address.name}>
+              <Input type="text" placeholder="请输入地址" name={fields.address.name} defaultValue={checkList?.address ?? ''} />
             </FormItem>
 
-            <FormItem label='备注' name={fields.memo.name}>
-              <Textarea name={fields.memo.name} placeholder='备注信息，告知店家一些注意事项' defaultValue={checkList?.memo ?? ''} />
+            <FormItem label="备注" name={fields.memo.name}>
+              <Textarea name={fields.memo.name} placeholder="备注信息，告知店家一些注意事项" defaultValue={checkList?.memo ?? ''} />
             </FormItem>
 
             {selectedGoods.map((item, index) => {
@@ -170,20 +171,20 @@ export default function CheckListConfirm() {
                   <GoodsCard
                     goods={item.goods}
                     rightContent={
-                      !remoteGoodsList.map((it) => it.goods.id).includes(item.goods.id) ? (
-                        <span className=' text-yellow-300 font-normal text-sm'>未保存</span>
+                      !remoteGoodsList.map(it => it.goods.id).includes(item.goods.id) ? (
+                        <span className="text-sm font-normal text-yellow-300">未保存</span>
                       ) : null
                     }
                     footerContent={
-                      <div className='flex justify-between'>
+                      <div className="flex justify-between">
                         <span>数量</span>
                         <Input
-                          type='number'
-                          className='w-16 h-8'
+                          type="number"
+                          className="h-8 w-16"
                           min={1}
                           max={1000}
                           step={1}
-                          placeholder='数量'
+                          placeholder="数量"
                           name={`goodsList.[${index}].num`}
                           defaultValue={item.num}
                         />
@@ -200,10 +201,10 @@ export default function CheckListConfirm() {
               );
             })}
 
-            <input hidden name='status' defaultValue={checkListStatusEnum.Values.WAIT} />
+            <input hidden name="status" defaultValue={checkListStatusEnum.Values.WAIT} />
           </div>
-          <div className='mt-4 flex h-14 w-full items-center '>
-            <Button variant='default' className='w-full' type='submit' disabled={navigation.state !== 'idle'}>
+          <div className="mt-4 flex h-14 w-full items-center">
+            <Button variant="default" className="w-full" type="submit" disabled={navigation.state !== 'idle'}>
               {navigation.state !== 'idle' ? '提交中...' : '提交'}
             </Button>
           </div>

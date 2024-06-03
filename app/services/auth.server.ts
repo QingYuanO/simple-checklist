@@ -35,7 +35,7 @@ authenticator.use(
     //用于开发
     await context?.db.user.update({
       data: {
-        isAdmin: false,
+        isAdmin: true,
       },
       where: { openid },
     });

@@ -1,18 +1,18 @@
+import { jsonWithError, jsonWithSuccess } from 'remix-toast';
+import { typedjson, useTypedFetcher, useTypedLoaderData } from 'remix-typedjson';
 import { CheckList } from '@prisma/client';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { Ghost } from 'lucide-react';
-import CheckListCard from '~/components/CheckListCard';
-import Header from '~/components/Header';
-import { Button, buttonVariants } from '~/components/ui/button';
-import { authUser } from '~/services/auth.server';
-import { typedjson, useTypedFetcher, useTypedLoaderData } from 'remix-typedjson';
-import CheckListStatusTabs from '~/components/CheckListStatusTabs';
-import { jsonWithError, jsonWithSuccess } from 'remix-toast';
-import { useDebouncedCallback } from 'use-debounce';
 import { Link, useSubmit } from '@remix-run/react';
-import { checkListStatusEnum } from '~/lib/validate';
-import { useSetAtom } from 'jotai';
 import { selectedGoodsListFamily } from '~/lib/atom';
+import { checkListStatusEnum } from '~/lib/validate';
+import { authUser } from '~/services/auth.server';
+import { useSetAtom } from 'jotai';
+import { Ghost } from 'lucide-react';
+import { useDebouncedCallback } from 'use-debounce';
+
+import CheckListCard from '~/components/CheckListCard';
+import CheckListStatusTabs from '~/components/CheckListStatusTabs';
+import Header from '~/components/Header';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog';
+import { Button, buttonVariants } from '~/components/ui/button';
 
 export type LoaderType = { checkList: CheckList[] };
 
@@ -141,10 +142,10 @@ export default function ConsumerHome() {
   );
 
   return (
-    <div className='py-14'>
-      <Header title='我的清单' isBack />
+    <div className="py-14">
+      <Header title="我的清单" isBack />
       <CheckListStatusTabs
-        onValueChange={(v) => {
+        onValueChange={v => {
           const formData = new FormData();
           formData.append('status', v);
           fetcher.submit(formData);
@@ -152,50 +153,54 @@ export default function ConsumerHome() {
       />
 
       {checkList && checkList.length > 0 ? (
-        <div className='flex flex-col gap-4 px-4 pb-4'>
-          {checkList?.map((item) => (
+        <div className="flex flex-col gap-4 px-4 pb-4">
+          {checkList?.map(item => (
             <CheckListCard
               key={item.id}
               checkList={item as CheckList}
               footer={
                 <>
-                  {item.status === checkListStatusEnum.Values.WAIT ? (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant={'secondary'} size='sm'>
-                          取消
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>提示</AlertDialogTitle>
-                          <AlertDialogDescription>确定取消吗?</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>取消</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleCancelCheckList(item)}>确定</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  ) : (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant='destructive' size='sm'>
-                          删除
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>提示</AlertDialogTitle>
-                          <AlertDialogDescription>确定删除吗?</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>取消</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteCheckList(item)}>确定</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )}
+                  {{
+                    WAIT: (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant={'secondary'} size="sm">
+                            取消
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>提示</AlertDialogTitle>
+                            <AlertDialogDescription>确定取消吗?</AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleCancelCheckList(item)}>确定</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    ),
+                    CANCEL: (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" size="sm">
+                            删除
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>提示</AlertDialogTitle>
+                            <AlertDialogDescription>确定删除吗?</AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleDeleteCheckList(item)}>确定</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    ),
+                  }[item.status] ?? <span></span>}
+
                   {item.status === checkListStatusEnum.Values.WAIT ? (
                     <Link
                       onClick={() => {
@@ -223,9 +228,9 @@ export default function ConsumerHome() {
           ))}
         </div>
       ) : (
-        <div className='mt-20 flex flex-col items-center gap-2'>
-          <Ghost className='size-8 text-zinc-800' />
-          <h3 className='font-semibold'>暂无数据</h3>
+        <div className="mt-20 flex flex-col items-center gap-2">
+          <Ghost className="size-8 text-zinc-800" />
+          <h3 className="font-semibold">暂无数据</h3>
         </div>
       )}
     </div>

@@ -13,6 +13,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const user = await authUser(request, context);
   const { searchParams } = new URL(request.url);
   const page = z.coerce.number().parse(searchParams.get('page') ?? 1);
+  const word = searchParams.get('word') ?? '';
   const take = 8;
   const count = await context.db.goods.count();
 
@@ -24,13 +25,16 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     },
     where: {
       ...(!user?.isAdmin ? { isActivity: true } : {}),
+      name: {
+        contains: word,
+      },
     },
   });
   const hasMore = Math.ceil(count / take) > page;
   return { pages, nextPage: hasMore ? page + 1 : null, total: count };
 };
 
-export const fetchGoods = async (page: number) => {
-  const res = await fetch(`/api/goods?page=${page}`);
+export const fetchGoods = async (params: { page: number; word?: string }) => {
+  const res = await fetch(`/api/goods?page=${params.page}&word=${params.word ?? ''}`);
   return res.json() as Promise<GoodsFetchResponse>;
 };
