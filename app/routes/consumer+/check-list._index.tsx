@@ -162,23 +162,25 @@ export default function ConsumerHome() {
                 <>
                   {{
                     WAIT: (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant={'secondary'} size="sm">
-                            取消
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>提示</AlertDialogTitle>
-                            <AlertDialogDescription>确定取消吗?</AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>取消</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleCancelCheckList(item)}>确定</AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <div className="space-x-2">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant={'secondary'} size="sm">
+                              取消
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>提示</AlertDialogTitle>
+                              <AlertDialogDescription>确定取消吗?</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>取消</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleCancelCheckList(item)}>确定</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     ),
                     CANCEL: (
                       <AlertDialog>
@@ -212,15 +214,7 @@ export default function ConsumerHome() {
                       编辑
                     </Link>
                   ) : (
-                    <Link
-                      onClick={() => {
-                        setSelectedGoods([]);
-                      }}
-                      className={buttonVariants({ variant: 'default', size: 'sm' })}
-                      to={`/consumer/check-list/confirm?type=update&id=${item.id}`}
-                    >
-                      详情
-                    </Link>
+                    <DetailLink id={item.id} />
                   )}
                 </>
               }
@@ -236,3 +230,11 @@ export default function ConsumerHome() {
     </div>
   );
 }
+
+const DetailLink = ({ id }: { id: string }) => {
+  return (
+    <Link to={`/check-list/${id}`} className={buttonVariants({ variant: 'default', size: 'sm' })}>
+      详情
+    </Link>
+  );
+};

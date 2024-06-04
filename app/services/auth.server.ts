@@ -1,8 +1,7 @@
 // app/services/auth.server.ts
-import { AppLoadContext, redirect } from '@remix-run/cloudflare';
 import { Authenticator, AuthorizationError } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
-
+import { AppLoadContext, redirect } from '@remix-run/cloudflare';
 import { sessionStorage } from '~/services/session.server';
 
 // Create an instance of the authenticator, pass a generic with what
@@ -35,7 +34,7 @@ authenticator.use(
     //用于开发
     await context?.db.user.update({
       data: {
-        isAdmin: true,
+        isAdmin: false,
       },
       where: { openid },
     });

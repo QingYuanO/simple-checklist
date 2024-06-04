@@ -1,6 +1,6 @@
+import { useEffect } from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import { useSubmit } from '@remix-run/react';
-import { useEffect } from 'react';
 import { authenticator } from '~/services/auth.server';
 import { commitSession, getSession } from '~/services/session.server';
 
@@ -17,7 +17,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
   return null;
 };
-
 export async function action({ request, context }: ActionFunctionArgs) {
   const { WECHAT_APPID } = context.cloudflare.env;
   const { searchParams } = new URL(request.url);

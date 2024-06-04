@@ -2,7 +2,7 @@ import { jsonWithError, jsonWithSuccess } from 'remix-toast';
 import { typedjson, useTypedFetcher, useTypedLoaderData } from 'remix-typedjson';
 import { CheckList } from '@prisma/client';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { useSubmit } from '@remix-run/react';
+import { Link, useSubmit } from '@remix-run/react';
 import { checkListStatusEnum } from '~/lib/validate';
 import { Ghost } from 'lucide-react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -21,7 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog';
-import { Button } from '~/components/ui/button';
+import { Button, buttonVariants } from '~/components/ui/button';
 
 export const meta: MetaFunction = () => {
   return [{ title: '清单' }];
@@ -132,52 +132,54 @@ export default function AdminHome() {
                   <Button variant={'secondary'} size="sm" asChild>
                     <a href={`tel:${item.phone}`}>拨打电话</a>
                   </Button>
-                  {DETAIL_STATUS.includes(item.status as checkListStatusEnum) && (
-                    <Button variant="default" size="sm">
-                      详情
-                    </Button>
-                  )}
+                  {DETAIL_STATUS.includes(item.status as checkListStatusEnum) && <DetailLink id={item.id} />}
                   {item.status === checkListStatusEnum.Values.PROGRESS && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="default" size="sm">
-                          送达
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>提示</AlertDialogTitle>
-                          <AlertDialogDescription>确定已将货物送达吗？</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>取消</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleChangeCheckListStatus(item, checkListStatusEnum.Values.DONE)}>
-                            确定
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <div className="space-x-2">
+                      <DetailLink id={item.id} type="outline" />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="default" size="sm">
+                            送达
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>提示</AlertDialogTitle>
+                            <AlertDialogDescription>确定已将货物送达吗？</AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleChangeCheckListStatus(item, checkListStatusEnum.Values.DONE)}>
+                              确定
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   )}
                   {item.status === checkListStatusEnum.Values.WAIT && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="default" size="sm">
-                          确认
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>提示</AlertDialogTitle>
-                          <AlertDialogDescription>确定接单吗？</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>取消</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleChangeCheckListStatus(item, checkListStatusEnum.Values.PROGRESS)}>
-                            确定
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <div className="space-x-2">
+                      <DetailLink id={item.id} type="outline" />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="default" size="sm">
+                            确认
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>提示</AlertDialogTitle>
+                            <AlertDialogDescription>确定接单吗？</AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleChangeCheckListStatus(item, checkListStatusEnum.Values.PROGRESS)}>
+                              确定
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   )}
                 </>
               }
@@ -193,3 +195,11 @@ export default function AdminHome() {
     </div>
   );
 }
+
+const DetailLink = ({ id, type }: { id: string; type?: 'outline' | 'default' }) => {
+  return (
+    <Link to={`/check-list/${id}`} className={buttonVariants({ variant: type ?? 'default', size: 'sm' })}>
+      详情
+    </Link>
+  );
+};
