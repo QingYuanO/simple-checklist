@@ -14,13 +14,13 @@ export const meta: MetaFunction = () => {
 };
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/wechat-auth',
+    failureRedirect: '/login',
   });
   const dbUser = await context.db.user.findUnique({ where: { id: user?.id } });
   if (dbUser) {
     return dbUser.isAdmin ? redirect('/admin') : redirect('/consumer');
   } else {
-    return redirect('/wechat-auth');
+    return redirect('/login');
   }
 };
 export default function Index() {

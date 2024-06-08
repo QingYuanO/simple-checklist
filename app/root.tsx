@@ -1,12 +1,14 @@
-import { LinksFunction, LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import stylesheet from '~/tailwind.css?url';
-import { authenticator } from './services/auth.server';
+import { toast as notify, ToastContainer } from 'react-toastify';
 import { getToast } from 'remix-toast';
+import { json, LinksFunction, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import stylesheet from '~/tailwind.css?url';
 
-import { ToastContainer, toast as notify } from 'react-toastify';
+import { authenticator } from './services/auth.server';
+
 import 'react-toastify/dist/ReactToastify.css';
+
 import { useEffect } from 'react';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }];
@@ -31,6 +33,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { toast } = useLoaderData<typeof loader>();
+
   useEffect(() => {
     if (toast) {
       // notify on a toast message
@@ -38,14 +41,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
     }
   }, [toast]);
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
-        <meta charSet='utf-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className='bg-background text-foreground '>
+      <body className="relative mx-auto max-w-2xl bg-background text-foreground">
         {children}
         <ScrollRestoration />
         <Scripts />

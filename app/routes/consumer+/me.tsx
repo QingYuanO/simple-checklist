@@ -1,8 +1,12 @@
 import { typedjson, useTypedLoaderData } from 'remix-typedjson';
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { Link, useRouteLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import { Form, Link, useRouteLoaderData } from '@remix-run/react';
+import { cn } from '~/lib/utils';
 import { loader as rootLoader } from '~/root';
+import { authenticator } from '~/services/auth.server';
 import { ChevronRight, Smartphone, User } from 'lucide-react';
+
+import { Button } from '~/components/ui/button';
 
 export const meta: MetaFunction = () => {
   return [{ title: '我的' }];
@@ -12,6 +16,12 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
   const user = await context.db.user.findFirst({ where: { isAdmin: true } });
   return typedjson({ shopUser: user });
 };
+
+export async function action({ request }: ActionFunctionArgs) {
+  return await authenticator.logout(request, {
+    redirectTo: '/login',
+  });
+}
 
 export default function ConsumerMe() {
   const { user } = useRouteLoaderData<typeof rootLoader>('root') ?? {};
@@ -44,6 +54,13 @@ export default function ConsumerMe() {
           </a>
           <ChevronRight />
         </div>
+      </div>
+      <div className="fixed bottom-16 left-0 flex w-full justify-center">
+        <Form method="POST">
+          <Button variant="link" className={cn('w-32 text-sm text-muted-foreground')}>
+            退出登录
+          </Button>
+        </Form>
       </div>
     </div>
   );

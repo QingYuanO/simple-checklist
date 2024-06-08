@@ -8,7 +8,7 @@ import { authenticator } from '~/services/auth.server';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const sessionUser = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/wechat-auth',
+    failureRedirect: '/login',
   });
 
   const users = await context.db.user.findMany({

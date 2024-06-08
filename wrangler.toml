@@ -12,18 +12,16 @@ pages_build_output_dir = "./build/client"
 
 
 [vars]
-WECHAT_APPID = "wx256067f403eec4d8"
-WECHAT_APP_SECRET = "38fc344e32b1ddf937644e3f82e49d83"
+ADMIN_ACCOUNT = "13974032066"
 
 ######## PREVIEW environment config ########
 
 [env.preview.vars]
-WECHAT_APPID = "wx256067f403eec4d8"
-WECHAT_APP_SECRET = "38fc344e32b1ddf937644e3f82e49d83"
+ADMIN_ACCOUNT = "13974032066"
 
 ######## PRODUCTION environment config ########
 
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "simple-checklist"
-database_id = "98ab90ec-b337-4d1c-82ab-4a61a142250e"
+database_id = "2eeb1266-5079-4b24-9a8a-e3a9fb476321"

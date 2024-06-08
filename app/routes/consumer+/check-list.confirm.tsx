@@ -176,11 +176,11 @@ export default function CheckListConfirm() {
                       ) : null
                     }
                     footerContent={
-                      <div className="flex justify-between">
+                      <div className="flex justify-between text-sm">
                         <span>数量</span>
                         <Input
                           type="number"
-                          className="h-8 w-16"
+                          className="h-6 w-14"
                           min={1}
                           max={1000}
                           step={1}
