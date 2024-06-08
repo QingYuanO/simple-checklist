@@ -17,7 +17,7 @@ PRISMA_ENV = "dev"
 
 ######## PREVIEW environment config ########
 
-[env.staging.vars]
+[env.preview.vars]
 ADMIN_ACCOUNT = "13974032066"
 PRISMA_ENV = "test"
 
