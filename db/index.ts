@@ -8,16 +8,17 @@ declare global {
 
 let prisma: PrismaClient;
 
-export function getPrisma(client: D1Database) {
-  const adapter = new PrismaD1(client);
-
-  if (process.env.NODE_ENV === 'production') {
-    prisma = new PrismaClient({ adapter });
-  } else {
+export function getPrisma(env: Env) {
+  const adapter = new PrismaD1(env.DB);
+  console.log(env.ENVIRONMENT);
+  
+  if (env.ENVIRONMENT === 'dev') {
     if (!global.cachedPrisma) {
       global.cachedPrisma = new PrismaClient({ adapter });
     }
     prisma = global.cachedPrisma;
+  } else {
+    prisma = new PrismaClient({ adapter });
   }
   return prisma;
 }

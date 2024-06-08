@@ -20,7 +20,7 @@ export default async function handleRequest(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadContext: AppLoadContext
 ) {
-  loadContext.db = getPrisma(loadContext.cloudflare.env.DB);
+  loadContext.db = getPrisma(loadContext.cloudflare.env);
   const body = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
     signal: request.signal,
     onError(error: unknown) {
