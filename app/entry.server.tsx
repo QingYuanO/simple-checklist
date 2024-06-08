@@ -4,11 +4,12 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
+import { renderToReadableStream } from 'react-dom/server';
+import { PrismaD1 } from '@prisma/adapter-d1';
+import { PrismaClient } from '@prisma/client';
 import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
-import { getPrisma } from 'db';
 import { isbot } from 'isbot';
-import { renderToReadableStream } from 'react-dom/server';
 
 export default async function handleRequest(
   request: Request,
@@ -20,7 +21,10 @@ export default async function handleRequest(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadContext: AppLoadContext
 ) {
-  loadContext.db = getPrisma(loadContext.cloudflare.env);
+  const adapter = new PrismaD1(loadContext.cloudflare.env.DB);
+  if (!loadContext.db) {
+    loadContext.db = new PrismaClient({ adapter });
+  }
   const body = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
     signal: request.signal,
     onError(error: unknown) {

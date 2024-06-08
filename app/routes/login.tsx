@@ -28,7 +28,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
   try {
     const formData = await request.clone().formData();
     const submission = parseWithZod(formData, { schema: schema });
-
+    
     if (submission.status !== 'success') {
       return json(submission.reply());
     }
