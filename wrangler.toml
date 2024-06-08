@@ -1,7 +1,7 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "simple-checklist"
 compatibility_date = "2024-05-02"
-pages_build_output_dir = "./build/client"
+pages_build_output_dir = "./build"
 
 # Bind a D1 database. D1 is Cloudflare’s native serverless SQL database.
 # Docs: https://developers.cloudflare.com/pages/functions/bindings/#d1-databases
