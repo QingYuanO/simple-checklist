@@ -11,7 +11,7 @@ let prisma: PrismaClient;
 export function getPrisma(env: Env) {
   const adapter = new PrismaD1(env.DB);
 
-  if (env.ENV === 'dev') {
+  if (env.PRISMA_ENV === 'dev') {
     if (!global.cachedPrisma) {
       global.cachedPrisma = new PrismaClient({ adapter });
     }
