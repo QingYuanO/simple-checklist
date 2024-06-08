@@ -2,11 +2,10 @@ import { AuthorizationError } from 'remix-auth';
 import { jsonWithError } from 'remix-toast';
 import { FormProvider, SubmissionResult, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { Form, useActionData } from '@remix-run/react';
 import { phoneSchema } from '~/lib/validate';
 import { authenticator } from '~/services/auth.server';
-import { commitSession, getSession } from '~/services/session.server';
 import { z } from 'zod';
 
 import FormItem from '~/components/FormItem';
@@ -33,25 +32,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
     if (submission.status !== 'success') {
       return json(submission.reply());
     }
-    const user = await authenticator.authenticate('user-pass', request, {
+
+    return await authenticator.authenticate('user-pass', request, {
       failureRedirect: '/login',
+      successRedirect: '/',
       context,
     });
-
-    // manually get the session
-    const session = await getSession(request.headers.get('cookie'));
-    // and store the user data
-    session.set(authenticator.sessionKey, user);
-
-    // commit the session
-    const headers = new Headers({ 'Set-Cookie': await commitSession(session, { maxAge: 60 * 60 * 24 * 7 }) });
-
-    const dbUser = await context.db.user.findUnique({ where: { id: user?.id ?? '' } });
-    if (dbUser) {
-      return dbUser.isAdmin ? redirect('/admin', { headers }) : redirect('/consumer', { headers });
-    } else {
-      return redirect('/login');
-    }
   } catch (error) {
     if (error instanceof Response) return error;
     if (error instanceof AuthorizationError) {

@@ -21,9 +21,6 @@ PRISMA_ENV = "dev"
 ADMIN_ACCOUNT = "13974032066"
 PRISMA_ENV = "test"
 
-[env.production.vars]
-ADMIN_ACCOUNT = "13974032066"
-PRISMA_ENV = "prod"
 
 ######## PRODUCTION environment config ########
 
