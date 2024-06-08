@@ -11,13 +11,13 @@ let prisma: PrismaClient;
 export function getPrisma(env: Env) {
   const adapter = new PrismaD1(env.DB);
 
-  if (env.PRISMA_ENV === 'dev') {
+  if (env.ENV === 'prod' || env.ENV === 'test') {
+    prisma = new PrismaClient({ adapter });
+    prisma = global.cachedPrisma;
+  } else {
     if (!global.cachedPrisma) {
       global.cachedPrisma = new PrismaClient({ adapter });
     }
-    prisma = global.cachedPrisma;
-  } else {
-    prisma = new PrismaClient({ adapter });
   }
   return prisma;
 }

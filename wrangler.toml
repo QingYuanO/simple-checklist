@@ -13,13 +13,8 @@ pages_build_output_dir = "./build/client"
 
 [vars]
 ADMIN_ACCOUNT = "13974032066"
-PRISMA_ENV = "dev"
 
 ######## PREVIEW environment config ########
-
-[env.preview.vars]
-ADMIN_ACCOUNT = "13974032066"
-PRISMA_ENV = "test"
 
 
 ######## PRODUCTION environment config ########
