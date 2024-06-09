@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { FormProvider, SubmissionResult, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { User } from '@prisma/client';
-import { Form, useActionData, useNavigate } from '@remix-run/react';
+import { Form, useActionData, useNavigate, useNavigation } from '@remix-run/react';
 import { editInfoSchema } from '~/lib/validate';
+import { Loader2 } from 'lucide-react';
 
 import FormItem from '~/components/FormItem';
 import Header from '~/components/Header';
@@ -12,7 +13,8 @@ import { Input } from '~/components/ui/input';
 
 export default function EditInfoForm({ user }: { user: User | null }) {
   const navigate = useNavigate();
-
+  const navigation = useNavigation();
+  const isLoading = navigation.state !== 'idle';
   const lastResult = useActionData<SubmissionResult>();
   const [form, fields] = useForm({
     // Sync the result of last submission
@@ -46,8 +48,8 @@ export default function EditInfoForm({ user }: { user: User | null }) {
           </FormItem>
           <input type="text" hidden name={fields.id.name} defaultValue={user!.id} readOnly />
           {fields.id.errors}
-          <Button type="submit" className="w-full">
-            确认
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}确认
           </Button>
         </Form>
       </FormProvider>

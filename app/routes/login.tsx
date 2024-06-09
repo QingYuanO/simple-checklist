@@ -3,7 +3,7 @@ import { jsonWithError } from 'remix-toast';
 import { FormProvider, SubmissionResult, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
-import { Form, useActionData } from '@remix-run/react';
+import { Form, useActionData, useNavigation } from '@remix-run/react';
 import { phoneSchema } from '~/lib/validate';
 import { authenticator } from '~/services/auth.server';
 import { commitSession, getSession } from '~/services/session.server';
@@ -60,7 +60,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 export default function Login() {
   const lastResult = useActionData<SubmissionResult>();
-
+  const navigation = useNavigation();
+  const isLoading = navigation.state !== 'idle';
   const [form, fields] = useForm({
     // Sync the result of last submission
     lastResult,
@@ -89,8 +90,8 @@ export default function Login() {
             <Input type="password" placeholder="请输入密码" name={fields.password.name} />
           </FormItem>
 
-          <Button type="submit" className="w-full">
-            登录
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? '登录中...' : '登录'}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             没有账号将<span className="font-bold text-foreground">自动注册</span>

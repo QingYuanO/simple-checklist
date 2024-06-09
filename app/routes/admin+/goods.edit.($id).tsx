@@ -1,10 +1,12 @@
-import { FormProvider, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import { Form, useActionData, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { useEffect } from 'react';
 import { jsonWithSuccess } from 'remix-toast';
+import { FormProvider, useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { Form, useActionData, useLoaderData, useNavigate, useNavigation, useParams } from '@remix-run/react';
+import { Loader2 } from 'lucide-react';
 import { z } from 'zod';
+
 import FormItem from '~/components/FormItem';
 import Header from '~/components/Header';
 import { Button } from '~/components/ui/button';
@@ -70,6 +72,9 @@ export default function GoodsEdit() {
     shouldValidate: 'onBlur',
   });
 
+  const navigation = useNavigation();
+  const isLoading = navigation.state !== 'idle';
+
   useEffect(() => {
     if (lastResult?.status === 'success') {
       navigate(-1);
@@ -77,19 +82,19 @@ export default function GoodsEdit() {
   }, [lastResult, navigate]);
 
   return (
-    <div className='pt-14'>
+    <div className="pt-14">
       <Header title={params.id ? '编辑商品' : '添加商品'} isBack />
       <FormProvider context={form.context}>
-        <Form method='POST' id={form.id} onSubmit={form.onSubmit} replace className='p-4 space-y-2'>
-          <FormItem label='名称' name={fields.name.name}>
-            <Input type='text' placeholder='请输入名称' name={fields.name.name} defaultValue={goods?.name ?? ''} />
+        <Form method="POST" id={form.id} onSubmit={form.onSubmit} replace className="space-y-2 p-4">
+          <FormItem label="名称" name={fields.name.name}>
+            <Input type="text" placeholder="请输入名称" name={fields.name.name} defaultValue={goods?.name ?? ''} />
           </FormItem>
-          <FormItem label='描述' name={fields.description.name}>
-            <Textarea placeholder='请输入描述' name={fields.description.name} defaultValue={goods?.description ?? ''} />
+          <FormItem label="描述" name={fields.description.name}>
+            <Textarea placeholder="请输入描述" name={fields.description.name} defaultValue={goods?.description ?? ''} />
           </FormItem>
-          <input type='text' hidden name={fields.id.name} defaultValue={goods?.id} readOnly />
-          <Button type='submit' className='w-full'>
-            {params.id ? '修改' : '创建'}
+          <input type="text" hidden name={fields.id.name} defaultValue={goods?.id} readOnly />
+          <Button type="submit" className="w-full">
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {params.id ? '修改' : '创建'}
           </Button>
         </Form>
       </FormProvider>

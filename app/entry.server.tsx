@@ -9,6 +9,8 @@ import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
 
+import { connection } from './database/client';
+
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
@@ -19,6 +21,9 @@ export default async function handleRequest(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadContext: AppLoadContext
 ) {
+  if (process.env.NODE_ENV === 'development') {
+    loadContext.db = await connection(loadContext.cloudflare.env.DB);
+  }
   const body = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
     signal: request.signal,
     onError(error: unknown) {

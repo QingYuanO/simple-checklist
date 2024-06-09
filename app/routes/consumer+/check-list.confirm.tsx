@@ -83,6 +83,7 @@ export default function CheckListConfirm() {
   const navigate = useNavigate();
   const navigation = useNavigation();
 
+  const isLoading = navigation.state !== 'idle';
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') as string;
 
@@ -206,8 +207,8 @@ export default function CheckListConfirm() {
             <input hidden name="status" defaultValue={checkListStatusEnum.Values.WAIT} />
           </div>
           <div className="mt-4 flex h-14 w-full items-center">
-            <Button variant="default" className="w-full" type="submit" disabled={navigation.state !== 'idle'}>
-              {navigation.state !== 'idle' ? '提交中...' : '提交'}
+            <Button variant="default" className="w-full" type="submit" disabled={isLoading}>
+              {isLoading ? '提交中...' : '提交'}
             </Button>
           </div>
         </Form>
