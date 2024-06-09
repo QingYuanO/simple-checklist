@@ -1,9 +1,8 @@
 import { typedjson, useTypedLoaderData } from 'remix-typedjson';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { Form, Link, useRouteLoaderData } from '@remix-run/react';
+import { Form, Link } from '@remix-run/react';
 import { cn } from '~/lib/utils';
-import { loader as rootLoader } from '~/root';
-import { authenticator } from '~/services/auth.server';
+import { authenticator, authUser } from '~/services/auth.server';
 import { ChevronRight, Smartphone, User } from 'lucide-react';
 
 import { Button } from '~/components/ui/button';
@@ -12,9 +11,12 @@ export const meta: MetaFunction = () => {
   return [{ title: '我的' }];
 };
 
-export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const user = await context.db.user.findFirst({ where: { isAdmin: true } });
-  return typedjson({ shopUser: user });
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+  const user = await authUser(request, context);
+
+  const shopUser = await context.db.user.findFirst({ where: { isAdmin: true } });
+
+  return typedjson({ shopUser, user });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -24,8 +26,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function ConsumerMe() {
-  const { user } = useRouteLoaderData<typeof rootLoader>('root') ?? {};
-  const { shopUser } = useTypedLoaderData<typeof loader>();
+  const { shopUser, user } = useTypedLoaderData<typeof loader>();
   return (
     <div className="flex flex-col">
       <div className="space-y-2 border-b border-border p-4">

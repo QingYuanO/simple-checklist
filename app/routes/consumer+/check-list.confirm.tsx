@@ -5,10 +5,9 @@ import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { CheckList, Goods } from '@prisma/client';
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { Form, Link, useActionData, useNavigate, useNavigation, useRouteLoaderData, useSearchParams } from '@remix-run/react';
+import { Form, Link, useActionData, useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
 import { CheckListGoodsList, selectedGoodsListFamily } from '~/lib/atom';
 import { CheckListSchema, checkListSchema, checkListStatusEnum } from '~/lib/validate';
-import { loader as rootLoader } from '~/root';
 import { authUser } from '~/services/auth.server';
 import { useAtom } from 'jotai/react';
 
@@ -22,13 +21,16 @@ import { Textarea } from '~/components/ui/textarea';
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id') as string;
+
+  const user = await authUser(request, context);
+
   if (!id) {
-    return typedjson({ checkList: null });
+    return typedjson({ checkList: null, user });
   }
 
   const checkList = await context.db.checkList.findUnique({ where: { id } });
 
-  return typedjson({ checkList });
+  return typedjson({ checkList, user });
 };
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -80,13 +82,13 @@ const getRemoteGoodsList = (checkList: CheckList | null) => {
 export default function CheckListConfirm() {
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const { user } = useRouteLoaderData<typeof rootLoader>('root') ?? {};
+
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') as string;
 
   const [selectedGoods, setSelectedGoods] = useAtom(selectedGoodsListFamily({ id: type, checkListGoodsList: [] }));
 
-  const { checkList } = useTypedLoaderData<typeof loader>();
+  const { checkList, user } = useTypedLoaderData<typeof loader>();
   const remoteGoodsList = getRemoteGoodsList(checkList);
 
   const lastResult = useActionData<typeof action>();

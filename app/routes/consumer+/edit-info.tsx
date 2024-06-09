@@ -1,8 +1,11 @@
-import { parseWithZod } from '@conform-to/zod';
-import { ActionFunctionArgs, json } from '@remix-run/cloudflare';
 import { jsonWithSuccess } from 'remix-toast';
-import EditInfoForm from '~/components/EditInfoForm';
+import { typedjson, useTypedLoaderData } from 'remix-typedjson';
+import { parseWithZod } from '@conform-to/zod';
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { editInfoSchema } from '~/lib/validate';
+import { authUser } from '~/services/auth.server';
+
+import EditInfoForm from '~/components/EditInfoForm';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -25,6 +28,13 @@ export async function action({ request, context }: ActionFunctionArgs) {
   });
 }
 
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+  const user = await authUser(request, context);
+
+  return typedjson({ user });
+};
+
 export default function EditInfo() {
-  return <EditInfoForm />;
+  const { user } = useTypedLoaderData<typeof loader>();
+  return <EditInfoForm user={user} />;
 }

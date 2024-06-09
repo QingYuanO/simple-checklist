@@ -50,8 +50,9 @@ authenticator.use(
     const account = form.get('account') as string;
     const password = form.get('password') as string;
     const salt = bcryptjs.genSaltSync(10);
-
+    
     if(!context?.db){
+      console.log('----数据库连接失败-----');
       throw new AuthorizationError('数据库连接失败');
     }
 

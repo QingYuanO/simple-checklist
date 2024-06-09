@@ -1,8 +1,8 @@
-import { ActionFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { Form, Link, useRouteLoaderData } from '@remix-run/react';
+import { typedjson, useTypedLoaderData } from 'remix-typedjson';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import { Form, Link } from '@remix-run/react';
 import { cn } from '~/lib/utils';
-import { loader as rootLoader } from '~/root';
-import { authenticator } from '~/services/auth.server';
+import { authenticator, authUser } from '~/services/auth.server';
 import { ChevronRight, Smartphone, Store } from 'lucide-react';
 
 import { Button, buttonVariants } from '~/components/ui/button';
@@ -18,8 +18,14 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 }
 
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+  const user = await authUser(request, context);
+
+  return typedjson({ user });
+};
+
 export default function AdminMe() {
-  const { user } = useRouteLoaderData<typeof rootLoader>('root') ?? {};
+  const { user } = useTypedLoaderData<typeof loader>();
 
   return (
     <div className="flex flex-col">

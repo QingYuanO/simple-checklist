@@ -1,17 +1,18 @@
-import { Form, useActionData, useNavigate, useRouteLoaderData } from '@remix-run/react';
-import Header from '~/components/Header';
+import { useEffect } from 'react';
 import { FormProvider, SubmissionResult, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { Input } from '~/components/ui/input';
-import { Button } from '~/components/ui/button';
-import { loader as rootLoader } from '~/root';
-import FormItem from '~/components/FormItem';
-import { useEffect } from 'react';
+import { User } from '@prisma/client';
+import { Form, useActionData, useNavigate } from '@remix-run/react';
 import { editInfoSchema } from '~/lib/validate';
 
-export default function EditInfoForm() {
+import FormItem from '~/components/FormItem';
+import Header from '~/components/Header';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+
+export default function EditInfoForm({ user }: { user: User | null }) {
   const navigate = useNavigate();
-  const { user } = useRouteLoaderData<typeof rootLoader>('root') ?? {};
+
   const lastResult = useActionData<SubmissionResult>();
   const [form, fields] = useForm({
     // Sync the result of last submission
@@ -32,20 +33,20 @@ export default function EditInfoForm() {
     }
   }, [lastResult, navigate]);
   return (
-    <div className='py-14'>
-      <Header title='修改信息' isBack />
+    <div className="py-14">
+      <Header title="修改信息" isBack />
 
       <FormProvider context={form.context}>
-        <Form method='POST' id={form.id} onSubmit={form.onSubmit} className='p-4 space-y-2'>
-          <FormItem label='名称' name={fields.name.name}>
-            <Input type='text' placeholder='请输入名称' name={fields.name.name} defaultValue={user?.name ?? ''} />
+        <Form method="POST" id={form.id} onSubmit={form.onSubmit} className="space-y-2 p-4">
+          <FormItem label="名称" name={fields.name.name}>
+            <Input type="text" placeholder="请输入名称" name={fields.name.name} defaultValue={user?.name ?? ''} />
           </FormItem>
-          <FormItem label='手机号码' name={fields.phone.name}>
-            <Input type='text' placeholder='请输入手机号码' name={fields.phone.name} defaultValue={user?.phone ?? ''} />
+          <FormItem label="手机号码" name={fields.phone.name}>
+            <Input type="text" placeholder="请输入手机号码" name={fields.phone.name} defaultValue={user?.phone ?? ''} />
           </FormItem>
-          <input type='text' hidden name={fields.id.name} defaultValue={user!.id} readOnly />
+          <input type="text" hidden name={fields.id.name} defaultValue={user!.id} readOnly />
           {fields.id.errors}
-          <Button type='submit' className='w-full'>
+          <Button type="submit" className="w-full">
             确认
           </Button>
         </Form>

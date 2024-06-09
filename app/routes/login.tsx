@@ -2,10 +2,11 @@ import { AuthorizationError } from 'remix-auth';
 import { jsonWithError } from 'remix-toast';
 import { FormProvider, SubmissionResult, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import { Form, useActionData } from '@remix-run/react';
 import { phoneSchema } from '~/lib/validate';
 import { authenticator } from '~/services/auth.server';
+import { commitSession, getSession } from '~/services/session.server';
 import { z } from 'zod';
 
 import FormItem from '~/components/FormItem';
@@ -28,16 +29,23 @@ export async function action({ request, context }: ActionFunctionArgs) {
   try {
     const formData = await request.clone().formData();
     const submission = parseWithZod(formData, { schema: schema });
-    
+
     if (submission.status !== 'success') {
       return json(submission.reply());
     }
-
-    return await authenticator.authenticate('user-pass', request, {
-      failureRedirect: '/login',
-      successRedirect: '/',
+    const user = await authenticator.authenticate('user-pass', request, {
+      throwOnError: true,
       context,
     });
+    // manually get the session
+    const session = await getSession(request.headers.get('cookie'));
+    // and store the user data
+    session.set(authenticator.sessionKey, user);
+
+    // commit the session
+    const headers = new Headers({ 'Set-Cookie': await commitSession(session) });
+
+    return user?.isAdmin ? redirect('/admin', { headers }) : redirect('/consumer', { headers });
   } catch (error) {
     if (error instanceof Response) return error;
     if (error instanceof AuthorizationError) {
@@ -45,12 +53,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
         message: error.message,
       });
     }
+    console.log(error);
     return null;
   }
 }
 
 export default function Login() {
   const lastResult = useActionData<SubmissionResult>();
+
   const [form, fields] = useForm({
     // Sync the result of last submission
     lastResult,
