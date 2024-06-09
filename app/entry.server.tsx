@@ -5,8 +5,6 @@
  */
 
 import { renderToReadableStream } from 'react-dom/server';
-import { PrismaD1 } from '@prisma/adapter-d1';
-import { PrismaClient } from '@prisma/client';
 import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
@@ -21,10 +19,6 @@ export default async function handleRequest(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadContext: AppLoadContext
 ) {
-  const adapter = new PrismaD1(loadContext.cloudflare.env.DB);
-  if (!loadContext.db) {
-    loadContext.db = new PrismaClient({ adapter });
-  }
   const body = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
     signal: request.signal,
     onError(error: unknown) {

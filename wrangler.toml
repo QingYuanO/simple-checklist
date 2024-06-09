@@ -14,19 +14,8 @@ pages_build_output_dir = "./build/client"
 [vars]
 ADMIN_ACCOUNT = "13974032066"
 
-######## PREVIEW environment config ########
-
-[env.preview.vars]
-ADMIN_ACCOUNT = "13974032066"
-
-######## PRODUCTION environment config ########
-
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "simple-checklist"
 database_id = "2eeb1266-5079-4b24-9a8a-e3a9fb476321"
 
-[[env.production.d1_databases]]
-binding = "DB" # i.e. available in your Worker on env.DB
-database_name = "simple-checklist"
-database_id = "2eeb1266-5079-4b24-9a8a-e3a9fb476321"

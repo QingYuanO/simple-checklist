@@ -50,8 +50,15 @@ authenticator.use(
     const account = form.get('account') as string;
     const password = form.get('password') as string;
     const salt = bcryptjs.genSaltSync(10);
+
+    const ps = context?.cloudflare.env.DB.prepare('SELECT * from user');
+    const data = await ps?.first();
+
+    console.log(data);
+    console.log(context?.db);
     
-    if(!context?.db){
+
+    if (!context?.db) {
       console.log('----数据库连接失败-----');
       throw new AuthorizationError('数据库连接失败');
     }
