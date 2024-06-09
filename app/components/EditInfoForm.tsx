@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FormProvider, SubmissionResult, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { User } from '@prisma/client';
-import { Form, useActionData, useNavigate, useNavigation } from '@remix-run/react';
+import { Form, useActionData, useFormAction, useNavigate, useNavigation } from '@remix-run/react';
 import { editInfoSchema } from '~/lib/validate';
 import { Loader2 } from 'lucide-react';
 
@@ -14,7 +14,8 @@ import { Input } from '~/components/ui/input';
 export default function EditInfoForm({ user }: { user: User | null }) {
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const isLoading = navigation.state !== 'idle';
+  const formAction = useFormAction();
+  const isLoading = navigation.formAction === formAction;
   const lastResult = useActionData<SubmissionResult>();
   const [form, fields] = useForm({
     // Sync the result of last submission

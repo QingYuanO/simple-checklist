@@ -3,7 +3,7 @@ import { jsonWithSuccess } from 'remix-toast';
 import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { Form, useActionData, useLoaderData, useNavigate, useNavigation, useParams } from '@remix-run/react';
+import { Form, useActionData, useFormAction, useLoaderData, useNavigate, useNavigation, useParams } from '@remix-run/react';
 import { Loader2 } from 'lucide-react';
 import { z } from 'zod';
 
@@ -73,7 +73,9 @@ export default function GoodsEdit() {
   });
 
   const navigation = useNavigation();
-  const isLoading = navigation.state !== 'idle';
+  const formAction = useFormAction();
+
+  const isLoading = navigation.formAction === formAction;
 
   useEffect(() => {
     if (lastResult?.status === 'success') {

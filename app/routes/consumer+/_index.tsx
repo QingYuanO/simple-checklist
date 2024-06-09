@@ -44,7 +44,7 @@ export default function Components() {
         }
       />
       {selectedGoods.length > 0 && (
-        <div className="fixed inset-x-0 bottom-14 z-10 box-content flex h-14 items-center justify-between border-t border-border bg-background px-4 shadow safe-b sm:mx-auto sm:max-w-2xl">
+        <div className="fixed inset-x-0 bottom-14 z-10 mx-auto box-content flex h-14 max-w-2xl items-center justify-between border-t border-border bg-background px-4 shadow safe-b">
           <div className="text-sm">已添加商品{selectedGoods.length}件</div>
           <Button variant={'default'} size="sm" asChild>
             <Link to={`/consumer/check-list/confirm?type=add`}>确认清单</Link>

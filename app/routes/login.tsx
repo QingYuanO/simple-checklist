@@ -3,7 +3,7 @@ import { jsonWithError } from 'remix-toast';
 import { FormProvider, SubmissionResult, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
-import { Form, useActionData, useNavigation } from '@remix-run/react';
+import { Form, useActionData, useFormAction, useNavigation } from '@remix-run/react';
 import { phoneSchema } from '~/lib/validate';
 import { authenticator } from '~/services/auth.server';
 import { commitSession, getSession } from '~/services/session.server';
@@ -61,7 +61,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 export default function Login() {
   const lastResult = useActionData<SubmissionResult>();
   const navigation = useNavigation();
-  const isLoading = navigation.state !== 'idle';
+  const formAction = useFormAction();
+  const isLoading = navigation.formAction === formAction;
   const [form, fields] = useForm({
     // Sync the result of last submission
     lastResult,

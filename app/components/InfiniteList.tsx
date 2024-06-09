@@ -41,8 +41,8 @@ export default function InfiniteList(props: PropsWithChildren<InfiniteListProps>
           refreshFunction={() => refetch()}
           pullDownToRefresh
           pullDownToRefreshThreshold={60}
-          pullDownToRefreshContent={<h3 style={{ textAlign: 'center' }}>&#8595; 下拉加载</h3>}
-          releaseToRefreshContent={<h3 style={{ textAlign: 'center' }}>&#8593; 释放刷新</h3>}
+          pullDownToRefreshContent={<h3 className="mb-2 text-center">&#8595; 下拉加载</h3>}
+          releaseToRefreshContent={<h3 className="mb-2 text-center">&#8593; 释放刷新</h3>}
         >
           {children}
         </InfiniteScroll>

@@ -5,7 +5,7 @@ import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { CheckList, Goods } from '@prisma/client';
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { Form, Link, useActionData, useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
+import { Form, Link, useActionData, useFormAction, useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
 import { CheckListGoodsList, selectedGoodsListFamily } from '~/lib/atom';
 import { CheckListSchema, checkListSchema, checkListStatusEnum } from '~/lib/validate';
 import { authUser } from '~/services/auth.server';
@@ -82,8 +82,8 @@ const getRemoteGoodsList = (checkList: CheckList | null) => {
 export default function CheckListConfirm() {
   const navigate = useNavigate();
   const navigation = useNavigation();
-
-  const isLoading = navigation.state !== 'idle';
+  const formAction = useFormAction();
+  const isLoading = navigation.formAction === formAction;
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') as string;
 
