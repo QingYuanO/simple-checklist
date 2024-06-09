@@ -128,16 +128,9 @@ export default function AdminHome() {
 }
 
 const ActionCheckListCard = (props: { checkList: CheckList }) => {
+  const { checkList } = props;
   const fetcher = useFetcher<typeof action>();
   const isLoading = fetcher.state === 'submitting';
-
-  const checkList = fetcher.formData
-    ? { ...props.checkList, status: fetcher.formData.get('status') }
-    : fetcher.data
-      ? fetcher.data.checkList
-        ? fetcher.data.checkList
-        : props.checkList
-      : props.checkList;
 
   return (
     <CheckListCard
@@ -155,7 +148,7 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="default" size="sm" disabled={isLoading}>
-                    送达
+                    {isLoading ? '提交中...' : '送达'}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -183,7 +176,7 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="default" size="sm" disabled={isLoading}>
-                    确认
+                    {isLoading ? '确认中...' : '确认'}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>

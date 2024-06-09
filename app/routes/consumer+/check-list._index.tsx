@@ -171,17 +171,10 @@ const DetailLink = ({ id }: { id: string }) => {
 };
 
 const ActionCheckListCard = (props: { checkList: CheckList }) => {
+  const { checkList } = props;
   const setSelectedGoods = useSetAtom(updateAtom);
   const fetcher = useFetcher<typeof action>();
   const isLoading = fetcher.state === 'submitting';
-
-  const checkList = fetcher.formData
-    ? { ...props.checkList, status: fetcher.formData.get('status') }
-    : fetcher.data
-      ? fetcher.data.checkList
-        ? fetcher.data.checkList
-        : props.checkList
-      : props.checkList;
 
   return (
     <CheckListCard
@@ -194,7 +187,7 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant={'secondary'} size="sm" disabled={isLoading}>
-                      取消
+                      {isLoading ? '取消中...' : '取消'}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -235,7 +228,6 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
                         确定
                       </AlertDialogAction>
                       <input type="hidden" name="id" readOnly defaultValue={checkList.id} />
-                      <input type="hidden" name="status" readOnly defaultValue={checkListStatusEnum.Values.CANCEL} />
                     </fetcher.Form>
                   </AlertDialogFooter>
                 </AlertDialogContent>
