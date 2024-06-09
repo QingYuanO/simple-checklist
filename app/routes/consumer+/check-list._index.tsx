@@ -194,7 +194,7 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant={'secondary'} size="sm" disabled={isLoading}>
-                      {isLoading ? '取消中...' : '取消'}
+                      取消
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -219,8 +219,8 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
             CANCEL: (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm">
-                    {isLoading ? '删除中...' : '删除'}
+                  <Button variant="destructive" size="sm" disabled={isLoading}>
+                    删除
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>

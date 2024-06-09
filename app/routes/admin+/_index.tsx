@@ -154,8 +154,8 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
               <DetailLink id={checkList.id} type="outline" />
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="default" size="sm">
-                    {isLoading ? '提交中...' : '送达'}
+                  <Button variant="default" size="sm" disabled={isLoading}>
+                    送达
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -182,8 +182,8 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
               <DetailLink id={checkList.id} type="outline" />
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="default" size="sm">
-                    {isLoading ? '确认中...' : '确认'}
+                  <Button variant="default" size="sm" disabled={isLoading}>
+                    确认
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -213,7 +213,7 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
 
 const DetailLink = ({ id, type }: { id: string; type?: 'outline' | 'default' }) => {
   return (
-    <Link to={`/check-list/${id}`} className={buttonVariants({ variant: type ?? 'default', size: 'sm' })}>
+    <Link to={`/check-list/${id}`} rel="prefetch" className={buttonVariants({ variant: type ?? 'default', size: 'sm' })}>
       详情
     </Link>
   );
