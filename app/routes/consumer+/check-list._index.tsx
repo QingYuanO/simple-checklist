@@ -220,7 +220,7 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" size="sm" disabled={isLoading}>
-                    删除
+                    {isLoading ? '删除中...' : '删除'}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -235,6 +235,7 @@ const ActionCheckListCard = (props: { checkList: CheckList }) => {
                         确定
                       </AlertDialogAction>
                       <input type="hidden" name="id" readOnly defaultValue={checkList.id} />
+                      <input type="hidden" name="status" readOnly defaultValue={checkListStatusEnum.Values.CANCEL} />
                     </fetcher.Form>
                   </AlertDialogFooter>
                 </AlertDialogContent>
