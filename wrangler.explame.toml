@@ -1,0 +1,14 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "simple-checklist"
+compatibility_date = "2024-05-02"
+pages_build_output_dir = "./build/client"
+
+
+[vars]
+ADMIN_ACCOUNT = "管理员的电话号码"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "xxx" #D1数据库名称
+database_id = "xxx" #D1数据库id
+
